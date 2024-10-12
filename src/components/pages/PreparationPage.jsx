@@ -1,5 +1,5 @@
 import React from "react";
-import Footer from "../views/global/Footer";
+import { useParams, useNavigate } from "react-router-dom";
 import DataForm from "../views/local/DataForm";
 import css from "../../styles/views/global/main.css";
 
@@ -17,20 +17,32 @@ const reportBtnCSS = {
 const PreparationPage  = (props) => {
       
     const { actionData } = props;
+
+    const { reportName } = useParams();
+    const navigate = useNavigate();
+
+
+    const selectReport = (reportname) => {
+        navigate(`/preparation/${reportname}`);
+        //actionData([]);
+    }
     
     return (
         <React.Fragment>
             <MainContainer>
                 <AsideContainer>
-                    <button style={reportBtnCSS}>Отчёт № 1</button>
-                    <button style={reportBtnCSS}>Отчёт № 2</button>
-                    <button style={reportBtnCSS}>Отчёт № 3</button>
+                    <button style={reportBtnCSS} onClick={selectReport.bind(this, 'reportname1')}>Отчёт № 1</button>
+                    <button style={reportBtnCSS} onClick={selectReport.bind(this, 'reportname2')}>Отчёт № 2</button>
+                    <button style={reportBtnCSS} onClick={selectReport.bind(this, 'reportname3')}>Отчёт № 3</button>
                 </AsideContainer>
                 <ArticleContainer>
-                    <DataForm actionData={actionData}></DataForm>
+                    {reportName === 'choiceReport'
+                    ? <span>Выбор отчёта</span>
+                    :<DataForm actionData={actionData} ></DataForm>
+                    }
+                    
                 </ArticleContainer>
             </MainContainer>
-            <Footer></Footer>
         </React.Fragment>
     );
 }

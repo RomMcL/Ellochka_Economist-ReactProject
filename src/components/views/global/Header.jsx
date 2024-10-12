@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import css from "../../../styles/views/global/header.css";
 
 const { HeaderContainer, HeaderElements } = css;
@@ -11,19 +12,19 @@ const navButtonCSS = {
     cursor: 'pointer'
 }
 
-const Header = (props) => {
+const Header = () => {
 
-    const { actionPage } = props;
+    const navigate = useNavigate();
 
     return (
         <React.Fragment>
             <HeaderContainer>
                 <HeaderElements.Logo>ЭЛЛОЧКА</HeaderElements.Logo>
                 <HeaderElements.NavigationContainer>
-                    <span style={navButtonCSS}>Главная</span>
-                    <span onClick={() => actionPage('preparation')} style={navButtonCSS}>Подготовка</span>
-                    <span onClick={() => actionPage('initialData')} style={navButtonCSS}>Входные данные</span>
-                    <span style={navButtonCSS}>Результаты</span>
+                    <span onClick={() => navigate('/main')} style={navButtonCSS}>Главная</span>
+                    <span onClick={() => navigate('/preparation/choiceReport')} style={navButtonCSS}>Подготовка</span>
+                    <span onClick={() => navigate('/initialData')} style={navButtonCSS}>Входные данные</span>
+                    <span onClick={() => navigate('/result')} style={navButtonCSS}>Результаты</span>
                 </HeaderElements.NavigationContainer>
             </HeaderContainer>
         </React.Fragment>

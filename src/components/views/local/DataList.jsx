@@ -13,9 +13,8 @@ const DataList = (props) => {
             { !data.length ? 
                 <span>Данных ещё нет</span> :
                 (<DataListContainer>
-                
+                    <div>Сюда бы запилить фильтрацию и(или) сортировочку</div>
                     { data.map((item, index) => {
-
                         return (
                             <DataListLine key={index}>
                                 <DataListCell width={"30%"}>{item[0]}</DataListCell>
@@ -23,9 +22,7 @@ const DataList = (props) => {
                                 <DataListCell width={"30%"}>{item[2]}</DataListCell>
                             </DataListLine>
                         )
-
                     })}
-
                 </DataListContainer>) 
 
             }
