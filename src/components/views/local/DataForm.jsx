@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { changeInputDate, changeInputSales, changeInputCategory, changeInputPurchasePrice, 
+         changeInputPointOfSale } from "../../../redux-state/reducers/form-imput";
+import { useSelector, useDispatch } from "react-redux";
 import Input from "../../comps/Input";
+import reports from "../../../services/reports";
 import css from "../../../styles/views/local/form.css";
+
 
 const { FormContainer, FormButton } = css;
 
@@ -9,67 +13,87 @@ const DataForm = (props) => {
 
     const { actionData } = props;
 
-    const { reportName } = useParams();
+    const dispatch = useDispatch();
+    const reportType = useSelector(state => state.reportTypeSlice.reportType);
+    const inputDate = useSelector(state => state.formInputSlice.date);
+    const inputSales = useSelector(state => state.formInputSlice.sales);
+    const inputCategory = useSelector(state => state.formInputSlice.category);
+    const inputPurchasePrice = useSelector(state => state.formInputSlice.purchasePrice);
+    const inputPointOfSale = useSelector(state => state.formInputSlice.pointOfSale);
+    
+    const reportsNames = Object.keys(reports);
 
-    const [ date, setDate ]  = useState('');
-    const [ sales, setSales ] = useState('');
-    const [ category, setCategory ] = useState('');
 
+    const changeDate = (param) => {
+        dispatch(changeInputDate(param))
+    }
+    const changeSales = (param) => {
+        dispatch(changeInputSales(param))
+    }
+    const changeCategory = (param) => {
+        dispatch(changeInputCategory(param))
+    }
+    const changePurchasePrice = (param) => {
+        dispatch(changeInputPurchasePrice(param))
+    }
+    const changePointOfSale = (param) => {
+        dispatch(changeInputPointOfSale(param))
+    }
 
     const validation = () => {
-        if (date && sales && category) {
+        if ((inputDate && inputSales && inputCategory) || (inputPurchasePrice && inputPointOfSale)) {
             console.log('validation OK');
 
-            const dataLine = [date, sales, category];
-            actionData(prev => [ ...prev, dataLine]);
+            const dataLine = [inputDate, inputSales, inputCategory, inputPurchasePrice, inputPointOfSale];
+            //actionData(prev => [ ...prev, dataLine.filter(Boolean)]);
+            actionData(dataLine.filter(Boolean));
 
             // очистка полей после записи данных
-            setDate('');
-            setSales('');
-            setCategory('');
+            dispatch(changeInputDate(''))
+            dispatch(changeInputSales(''))
+            dispatch(changeInputCategory(''))
+            dispatch(changeInputPurchasePrice(''))
+            dispatch(changeInputPointOfSale(''))
+
         } else console.log('validation не пройдена')
     }
 
-    useEffect(() => {
-        console.log('report')
-    }, [])
+   // useEffect(() => {console.log(reportInfo)}, [reportName])
 
     return (
         
         <React.Fragment>
-            {reportName === 'reportname1'
+            {reportType === reportsNames[0]
             ? <>
                 <FormContainer>
-                    <Input inputValue={date} action={setDate} placeholder={"Введите 1.1"}/>
-                    <Input inputValue={sales} action={setSales} placeholder={"Введите 1.2"}/>
-                    <Input inputValue={category} action={setCategory} placeholder={"Введите 1.3"}/>
+                    <Input inputValue={inputDate} action={changeDate} placeholder={"Введите date"}/>
+                    <Input inputValue={inputSales} action={changeSales} placeholder={"Введите sales"}/>
+                    <Input inputValue={inputCategory} action={changeCategory} placeholder={"Введите category"}/>
                     <FormButton 
                         backgroundcolor={
-                            (!date || !sales || !category) ? "rgb(229, 229, 229)" : "rgb(40, 168, 40)"
+                            (!inputDate || !inputSales || !inputCategory) ? "rgb(229, 229, 229)" : "rgb(40, 168, 40)"
                         }
                         onClick={validation}
                     >Записать данные</FormButton>
                 </FormContainer>
-                <span>{ date }</span><br/>
-                <span>{ sales }</span><br/>
-                <span>{ category }</span>
+                <span>{ inputDate }</span><br/>
+                <span>{ inputSales }</span><br/>
+                <span>{ inputCategory }</span>
               </>
-            : reportName === 'reportname2'
+            : reportType === reportsNames[1]
             ? <>
                 <FormContainer>
-                    <Input inputValue={date} action={setDate} placeholder={"Введите 2.1"}/>
-                    <Input inputValue={sales} action={setSales} placeholder={"Введите 2.2"}/>
-                    <Input inputValue={category} action={setCategory} placeholder={"Введите 2.3"}/>
+                    <Input inputValue={inputPurchasePrice} action={changePurchasePrice} placeholder={"Введите purchasePrice"}/>
+                    <Input inputValue={inputPointOfSale} action={changePointOfSale} placeholder={"Введите pointOfSale"}/>
                     <FormButton 
                         backgroundcolor={
-                            (!date || !sales || !category) ? "rgb(229, 229, 229)" : "rgb(40, 168, 40)"
+                            (!inputPurchasePrice || !inputPointOfSale) ? "rgb(229, 229, 229)" : "rgb(40, 168, 40)"
                         }
                         onClick={validation}
                     >Записать данные</FormButton>
                 </FormContainer>
-                <span>{ date }</span><br/>
-                <span>{ sales }</span><br/>
-                <span>{ category }</span>
+                <span>{ inputPurchasePrice }</span><br/>
+                <span>{ inputPointOfSale }</span><br/>
               </>
             : <span>3й набор инпутов</span>
             }

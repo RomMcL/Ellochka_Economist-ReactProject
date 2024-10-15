@@ -1,17 +1,22 @@
 
 const reports = {
-    report1: {
-        name: "Отчёт № 1",
+    reportname1: {
+        name: "Отчёт № 11",
+        requiredData: ["Дата", "Категория", "Сумма продаж"],
+        width: ["30%", "30%", "30%"],
 
     },
-    report2: {
-        name: "Отчёт № 2",
+    reportname2: {
+        name: "Отчёт № 22",
+        requiredData: ["Закупка", "Точка"],
+        width: ["40%", "40%"],
 
     },
-    report3: {
-        name: "Отчёт № 3",
+    reportname3: {
+        name: "Отчёт № 33",
 
     },
 }
+
 
 export default reports;

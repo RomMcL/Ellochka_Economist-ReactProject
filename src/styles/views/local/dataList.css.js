@@ -21,7 +21,7 @@ const css = {
     DataListLine: styled.div`
         display: flex;
         flex-flow: row nowrap;
-        justify-content: space-between;
+        justify-content: space-around;
         align-items: center;
 
         width: 100%;
@@ -31,7 +31,16 @@ const css = {
 
         width: ${props => props.width};
 
-        font-size: 14px;
+        font-size: 1em;
+        text-align: center;
+    `,
+    DataListTitle: styled.span`
+        display: block;
+
+        width: ${props => props.width};
+
+        font-size: 1em;
+        font-weight: bold;
         text-align: center;
     `
 

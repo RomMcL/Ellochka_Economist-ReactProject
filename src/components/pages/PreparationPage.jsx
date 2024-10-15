@@ -1,6 +1,9 @@
-import React from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { changeReportType } from "../../redux-state/reducers/report-type";
+import { useSelector, useDispatch } from "react-redux";
 import DataForm from "../views/local/DataForm";
+import reports from "../../services/reports";
 import css from "../../styles/views/global/main.css";
 
 
@@ -18,25 +21,40 @@ const PreparationPage  = (props) => {
       
     const { actionData } = props;
 
-    const { reportName } = useParams();
     const navigate = useNavigate();
+
+    const dispatch = useDispatch();
+    const reportType = useSelector(state => state.reportTypeSlice.reportType);
+
+    const reportsNames = Object.keys(reports);
 
 
     const selectReport = (reportname) => {
         navigate(`/preparation/${reportname}`);
-        //actionData([]);
+        dispatch(changeReportType(reportname));
+        actionData([]);
     }
+
+    // useEffect(() => { console.log(reportsNames) }, [reportName]);
     
     return (
         <React.Fragment>
             <MainContainer>
                 <AsideContainer>
-                    <button style={reportBtnCSS} onClick={selectReport.bind(this, 'reportname1')}>Отчёт № 1</button>
-                    <button style={reportBtnCSS} onClick={selectReport.bind(this, 'reportname2')}>Отчёт № 2</button>
-                    <button style={reportBtnCSS} onClick={selectReport.bind(this, 'reportname3')}>Отчёт № 3</button>
+                    {reportType === 'choiceReport'
+                    ? reportsNames.map((name, index) => {
+                        return (
+                            <button key={index} style={reportBtnCSS} onClick={selectReport.bind(this, name)}>{ reports[reportsNames[index]].name }</button>
+                        )
+                      })
+                    : <div>Отчет выбран</div>
+                    }
+                    {reportType !== 'choiceReport' && 
+                        <button style={reportBtnCSS} onClick={selectReport.bind(this, 'choiceReport')}>Выбрать другой отчёт</button>
+                    }                    
                 </AsideContainer>
                 <ArticleContainer>
-                    {reportName === 'choiceReport'
+                    {reportType === 'choiceReport'
                     ? <span>Выбор отчёта</span>
                     :<DataForm actionData={actionData} ></DataForm>
                     }
