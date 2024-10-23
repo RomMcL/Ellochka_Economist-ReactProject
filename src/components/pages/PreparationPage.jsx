@@ -1,6 +1,8 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { changeReportType } from "../../redux-state/reducers/report-type";
+import { clearInputs } from "../../redux-state/reducers/form-imput";
+import { resetData } from "../../redux-state/reducers/data";
 import { useSelector, useDispatch } from "react-redux";
 import DataForm from "../views/local/DataForm";
 import reports from "../../services/reports";
@@ -32,10 +34,13 @@ const PreparationPage  = (props) => {
     const selectReport = (reportname) => {
         navigate(`/preparation/${reportname}`);
         dispatch(changeReportType(reportname));
-        actionData([]);
+        //actionData([]);
+        dispatch(resetData());
+        dispatch(clearInputs());
+
     }
 
-    // useEffect(() => { console.log(reportsNames) }, [reportName]);
+    // useEffect(() => { console.log(actionData([])) }, [reportType]);
     
     return (
         <React.Fragment>
@@ -44,14 +49,16 @@ const PreparationPage  = (props) => {
                     {reportType === 'choiceReport'
                     ? reportsNames.map((name, index) => {
                         return (
-                            <button key={index} style={reportBtnCSS} onClick={selectReport.bind(this, name)}>{ reports[reportsNames[index]].name }</button>
+                            <button key={index} style={reportBtnCSS} onClick={selectReport.bind(this, name)}>
+                                { reports[reportsNames[index]].name }
+                            </button>
                         )
                       })
-                    : <div>Отчет выбран</div>
-                    }
-                    {reportType !== 'choiceReport' && 
+                    : <div>
+                        <div>Выбранный отчёт</div>
                         <button style={reportBtnCSS} onClick={selectReport.bind(this, 'choiceReport')}>Выбрать другой отчёт</button>
-                    }                    
+                      </div>
+                    }                                      
                 </AsideContainer>
                 <ArticleContainer>
                     {reportType === 'choiceReport'

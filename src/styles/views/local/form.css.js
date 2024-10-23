@@ -12,6 +12,7 @@ const css = {
         height: fit-content;
         min-height: 60px;
         margin: 0 auto;
+        margin-bottom: 1em;
 
         padding: 1em;
 

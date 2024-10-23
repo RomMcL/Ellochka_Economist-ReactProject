@@ -10,9 +10,10 @@ export const dataSlice = createSlice({
     reducers: {
         changeData: (state, action) => {
             state.data.push(action.payload);
-        }
+        },
+        resetData: () => initialState
     }
 });
 
-export const { changeData } = dataSlice.actions;
+export const { changeData, resetData } = dataSlice.actions;
 export default dataSlice.reducer;

@@ -8,7 +8,8 @@ const css = {
         justify-content: flex-start;
         row-gap: 1em;
 
-        width: 800px;
+        width: fit-content;
+        min-width: 600px;
         height: fit-content;
 
         margin: 0 auto;

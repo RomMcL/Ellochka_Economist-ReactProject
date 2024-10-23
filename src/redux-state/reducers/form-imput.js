@@ -6,6 +6,11 @@ const initialState = {
     category: '',
     purchasePrice: '',
     pointOfSale: '',
+    typeOfSale: '',
+    client: '',
+    costDate: '',
+    costSum: '',
+    expenseItem: '',
 }
 
 export const formInputSlice = createSlice({
@@ -27,9 +32,27 @@ export const formInputSlice = createSlice({
         changeInputPointOfSale: (state, action) => {
             state.pointOfSale = action.payload;
         },
+        changeInputTypeOfSale: (state, action) => {
+            state.typeOfSale = action.payload;
+        },
+        changeInputClient: (state, action) => {
+            state.client = action.payload;
+        },
+
+        changeInputCostDate: (state, action) => {
+            state.costDate = action.payload;
+        },
+        changeInputCostSum: (state, action) => {
+            state.costSum = action.payload;
+        },
+        changeInputExpenseItem: (state, action) => {
+            state.expenseItem = action.payload;
+        },
+        clearInputs: () => initialState
     }
 });
 
-export const { changeInputDate, changeInputSales, changeInputCategory, 
-               changeInputPurchasePrice, changeInputPointOfSale } = formInputSlice.actions;
+export const { changeInputDate, changeInputCategory, changeInputSales, changeInputPurchasePrice, 
+               changeInputPointOfSale, changeInputTypeOfSale, changeInputClient, changeInputCostDate, 
+               changeInputCostSum, changeInputExpenseItem, clearInputs} = formInputSlice.actions;
 export default formInputSlice.reducer;
