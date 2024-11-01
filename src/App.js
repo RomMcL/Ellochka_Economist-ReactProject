@@ -1,7 +1,7 @@
 import React, { useState} from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { changeData } from './redux-state/reducers/data';
+import { changeIncomeData, changeExpenseData } from './redux-state/reducers/data';
 import Header from './components/views/global/Header';
 import IndexPage from './components/pages/IndexPage';
 import PreparationPage from './components/pages/PreparationPage';
@@ -12,13 +12,23 @@ import Footer from './components/views/global/Footer';
 
 function App() {
 
-  
-  const data = useSelector(state => state.dataSlice.data);
+  const data = {
+    incomeStatement: useSelector(state => state.dataSlice.incomeData),
+    expenseReport: useSelector(state => state.dataSlice.expenseData),
+  }
+  /* const incomeData = useSelector(state => state.dataSlice.incomeData); */
+  /* const expenseData = useSelector(state => state.dataSlice.expenseData); */
   const dispatch = useDispatch();
 
-  const setData = (param) => dispatch(changeData(param));
-
+  const setData = {
+    incomeData: (param) => dispatch(changeIncomeData(param)),
+    expenseData: (param) => dispatch(changeExpenseData(param)),
+  }
+  /* const setIncomeData = (param) => dispatch(changeIncomeData(param)); */
+  /* const setExpenseData = (param) => dispatch(changeExpenseData(param)); */
   
+
+
   return (
     <React.Fragment>
       <Header/>

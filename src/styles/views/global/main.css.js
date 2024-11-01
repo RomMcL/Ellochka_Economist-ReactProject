@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-const css = {
+const cssMain = {
     MainContainer: styled.main`
         display: flex;
         flex-flow: row nowrap;
@@ -9,12 +9,16 @@ const css = {
         width: 100%;
     `,
     ArticleContainer: styled.article`
-
         flex-grow: 1;
         height: 100%;
-        padding: 1em; 
-        background-color: aliceblue;
+        padding: 1em;
+        display: flex;
+        flex-flow: column nowrap;
+        align-items: center;
+        justify-content: flex-start;
+        row-gap: 1em;
 
+        background-color: aliceblue;
     `,
     AsideContainer: styled.aside`
 
@@ -35,4 +39,4 @@ const css = {
     
 }
 
-export default css;
+export default cssMain;

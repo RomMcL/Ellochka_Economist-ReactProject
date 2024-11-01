@@ -1,14 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
+import dayjs from "dayjs";
 
 const initialState = {
-    date: '',
+    date: null,
     sales: '',
     category: '',
     purchasePrice: '',
     pointOfSale: '',
     typeOfSale: '',
-    client: '',
-    costDate: '',
+    client: null,
+    costDate: null,
     costSum: '',
     expenseItem: '',
 }

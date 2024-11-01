@@ -1,5 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
+import ToggleBtnData from "../../comps/ToggleBtnData";
 import reports from "../../../services/reports";
 import css from "../../../styles/views/local/dataList.css";
 
@@ -7,41 +8,56 @@ const { DataListContainer, DataListLine, DataListCell, DataListTitle } = css;
 
 const DataList = (props) => {
 
-    const { data = [] } = props;
+    const { data = {
+        incomeStatement: [], 
+        expenseReport: [],
+    } } = props;
 
     const reportType = useSelector(state => state.reportTypeSlice.reportType);
 
-    const reportInfo = reports[reportType];
+    let defaultTypeData = "incomeStatement";
+    reportType !== "generalReport" && (defaultTypeData = reportType);
 
-    //useEffect(() => {console.log(reportInfo)}, [])
+    const [typeData, setTypeData] = useState(defaultTypeData);
+
+    const onClick = (event, newTypeData) => {
+        setTypeData(newTypeData);                
+    };
+
 
     return (
         <React.Fragment>
 
-            { !data.length
+            { !data.incomeStatement.length && !data.expenseReport.length
             ? <span>Данных ещё нет</span>
             :   <DataListContainer>
-                    <h3>Исходные данные для отчёта - { reportInfo.name }</h3>
+                    <h3>{ reports[reportType].name } (исходные данные)</h3>
+                    {reportType === "generalReport"
+                    && <ToggleBtnData typeData={typeData} onChange={onClick}></ToggleBtnData>
+                    }                   
                     <DataListLine>
-                        { reportInfo.requiredData.map((title, index) => {
+                        { reports[typeData].requiredData.map((title, index) => {
                             return (
-                                <DataListTitle key={index} width={reportInfo.width[index]}>{title}</DataListTitle>
+                                <DataListTitle key={index} width={reports[typeData].width[index]}>{title}</DataListTitle>
                             )
                         })}
-
                     </DataListLine>
+
                     <div>Сюда бы запилить фильтрацию и(или) сортировочку</div>
-                    { data.map((item, index) => {
+
+                    { data[typeData].map((item, index) => {
                         return (
                             <DataListLine key={index}>
-                                { data[index].map((cell, idx) => {
+                                { data[typeData][index].map((cell, idx) => {
                                     return (
-                                        <DataListCell key={idx} width={reportInfo.width[idx]}>{cell}</DataListCell>
+                                        <DataListCell key={idx} width={reports[typeData].width[idx]}>{cell}</DataListCell>
                                     )
                                 })}
                             </DataListLine>
                         )
                     })}
+
+
                 </DataListContainer> 
             }
            

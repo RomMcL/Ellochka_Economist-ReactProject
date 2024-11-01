@@ -3,20 +3,34 @@ import { changeInputDate, changeInputSales, changeInputCategory, changeInputPurc
          changeInputPointOfSale, changeInputTypeOfSale, changeInputClient, changeInputCostDate,
          changeInputCostSum, changeInputExpenseItem, clearInputs } from "../../../redux-state/reducers/form-imput";
 import { useSelector, useDispatch } from "react-redux";
-import Input from "../../comps/Input";
+import InpDate from "../../comps/InpDate";
+import InpNumber from "../../comps/InpNumber";
+import InpSelect from "../../comps/InpSelect";
+import InpSelectSearch from "../../comps/InpSelectSearch";
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
 import ValidationContainer from "./ValidationContainer";
+import company from "../../../services/company";
 import reports from "../../../services/reports";
 import css from "../../../styles/views/local/form.css";
 
 
 const { FormContainer, FormButton } = css;
 
+const reportsNames = Object.keys(reports);
+
+
 const DataForm = (props) => {
 
     const { actionData } = props;
 
     const dispatch = useDispatch();
+    const selectedCompany = useSelector(state => state.companySlice.company);
     const reportType = useSelector(state => state.reportTypeSlice.reportType);
+
     const inputDate = useSelector(state => state.formInputSlice.date);   
     const inputCategory = useSelector(state => state.formInputSlice.category);
     const inputSales = useSelector(state => state.formInputSlice.sales);
@@ -28,11 +42,14 @@ const DataForm = (props) => {
     const inputCostSum = useSelector(state => state.formInputSlice.costSum);
     const inputExpenseItem = useSelector(state => state.formInputSlice.expenseItem);
     
-    const reportsNames = Object.keys(reports);
 
+    const categories = company[selectedCompany].productCategories;
+    const expenses = company[selectedCompany].expenses;
+    const points = company[selectedCompany].points;
+    const clients = company[selectedCompany].clients;
 
     const changeDate = (param) => {
-        dispatch(changeInputDate(param))
+        dispatch(changeInputDate(param))       
     }
     const changeSales = (param) => {
         dispatch(changeInputSales(param))
@@ -46,8 +63,11 @@ const DataForm = (props) => {
     const changePointOfSale = (param) => {
         dispatch(changeInputPointOfSale(param))
     }
-    const changeTypeOfSale = (param) => {
-        dispatch(changeInputTypeOfSale(param))
+    const changeTypeOfSale = (event) => {
+        dispatch(changeInputTypeOfSale(event.target.value))
+        event.target.value === "розница"
+        ? changeClient('Физ.лицо')
+        : changeClient(null)
     }
     const changeClient = (param) => {
         dispatch(changeInputClient(param))
@@ -64,14 +84,26 @@ const DataForm = (props) => {
 
 
     const saveData = () => {
-        const dataLine = [inputDate, inputCategory, inputSales, inputPurchasePrice, inputPointOfSale,
-                          inputTypeOfSale, inputClient, inputCostDate, inputCostSum, inputExpenseItem];
-        //actionData(prev => [ ...prev, dataLine.filter(Boolean)]);
-        actionData(dataLine.filter(Boolean));
+        const dataIncome = [inputDate, inputCategory, inputSales, inputPointOfSale, inputTypeOfSale,
+                          inputClient, inputPurchasePrice];
+        const dataExpense = [inputCostDate, inputCostSum, inputExpenseItem];
+
+        actionData.incomeData(dataIncome);
+        actionData.expenseData(dataExpense);
+
 
         // очистка полей после записи данных
-        dispatch(clearInputs());
-            
+        dispatch(clearInputs());            
+    }
+
+    const testSaveData = () => {
+        const dataIncome = ["inputDate", "inputCategory", "inputSales", "inputPointOfSale", "inputTypeOfSale",
+                          "inputClient", "inputPurchasePrice"];
+        const dataExpense = ["inputCostDate", "inputCostSum", "inputExpenseItem"];
+
+        actionData.incomeData(dataIncome);
+        actionData.expenseData(dataExpense);
+           
     }
 
 
@@ -85,69 +117,54 @@ const DataForm = (props) => {
     }
 
     const inputsSet = () => {
-        switch (reportType) {
+        switch (reportType) {                
             case reportsNames[0]:
                 return (
                     <>
                     <FormContainer>
-                        <Input inputValue={inputDate} action={changeDate} placeholder={"Введите date"}/>
-                        <Input inputValue={inputCategory} action={changeCategory} placeholder={"Введите category"}/>
-                        <Input inputValue={inputSales} action={changeSales} placeholder={"Введите sales"}/>
+                        <InpDate label="Введите дату" inputValue={inputDate} action={changeDate}/>
+                        <InpSelect label={"Категория"} itemsArr={categories} inputValue={inputCategory} action={changeCategory}/>
+                        <InpNumber label={"Введите сумму продаж"} inputValue={inputSales} action={changeSales}/>
+                        <InpSelect label={"Укажите точку продажи"} itemsArr={points} inputValue={inputPointOfSale} action={changePointOfSale}/>
+                        <FormControl>
+                            <FormLabel id="demo-row-radio-buttons-group-label">Тип продажи</FormLabel>
+                            <RadioGroup
+                                row
+                                aria-labelledby="demo-row-radio-buttons-group-label"
+                                name="row-radio-buttons-group"
+                                value={inputTypeOfSale}
+                                onChange={changeTypeOfSale}
+                            >
+                                <FormControlLabel value="розница" control={<Radio />} label="Розничная" />
+                                <FormControlLabel value="опт" control={<Radio />} label="Оптовая" />
+                            </RadioGroup>
+                        </FormControl> 
+                        {inputTypeOfSale === "опт" &&
+                            <InpSelectSearch 
+                                label="Введите контрагента"
+                                itemsArr={clients}
+                                inputValue={inputClient}
+                                action={changeClient}
+                            />
+                        }
+                        <InpNumber label={"Введите цену закупки"} inputValue={inputPurchasePrice} action={changePurchasePrice}/>
                         <FormButton 
                             backgroundcolor={
-                                (!inputDate || !inputSales || !inputCategory) ? "rgb(229, 229, 229)" : "rgb(40, 168, 40)"
+                                (!inputDate || !inputSales || !inputCategory || !inputPointOfSale || (inputTypeOfSale === "опт" && !inputClient)) ? "rgb(229, 229, 229)" : "rgb(40, 168, 40)"
                             }
                             onClick={validation}
                         >Записать данные</FormButton>
                     </FormContainer>
-                    <ValidationContainer inputValues={[inputDate, inputCategory, inputSales]}/>
+                    <ValidationContainer inputValues={[inputDate, inputCategory, inputSales, inputPointOfSale, inputTypeOfSale, inputClient, inputPurchasePrice]}/>
                     </>
-                )                
+                )
             case reportsNames[1]:
                 return (
                     <>
                     <FormContainer>
-                        <Input inputValue={inputDate} action={changeDate} placeholder={"Введите date"}/>
-                        <Input inputValue={inputCategory} action={changeCategory} placeholder={"Введите category"}/>
-                        <Input inputValue={inputSales} action={changeSales} placeholder={"Введите sales"}/>
-                        <Input inputValue={inputPointOfSale} action={changePointOfSale} placeholder={"Введите PointOfSale"}/>
-                        <Input inputValue={inputTypeOfSale} action={changeTypeOfSale} placeholder={"Введите TypeOfSale"}/>
-                        <Input inputValue={inputClient} action={changeClient} placeholder={"Введите Client"}/>
-                        <FormButton 
-                            backgroundcolor={
-                                (!inputDate || !inputSales || !inputCategory || !inputPointOfSale || !inputTypeOfSale || !inputClient) ? "rgb(229, 229, 229)" : "rgb(40, 168, 40)"
-                            }
-                            onClick={validation}
-                        >Записать данные</FormButton>
-                    </FormContainer>
-                    <ValidationContainer inputValues={[inputDate, inputCategory, inputSales, inputPointOfSale, inputTypeOfSale, inputClient]}/>
-                    </>
-                )
-            case reportsNames[2]:
-                return (
-                    <>
-                    <FormContainer>
-                        <Input inputValue={inputDate} action={changeDate} placeholder={"Введите date"}/>
-                        <Input inputValue={inputCategory} action={changeCategory} placeholder={"Введите category"}/>
-                        <Input inputValue={inputSales} action={changeSales} placeholder={"Введите sales"}/>
-                        <Input inputValue={inputPurchasePrice} action={changePurchasePrice} placeholder={"Введите purchasePrice"}/>
-                        <FormButton 
-                            backgroundcolor={
-                                (!inputDate || !inputSales || !inputCategory || !inputPurchasePrice) ? "rgb(229, 229, 229)" : "rgb(40, 168, 40)"
-                            }
-                            onClick={validation}
-                        >Записать данные</FormButton>
-                    </FormContainer>
-                    <ValidationContainer inputValues={[inputDate, inputCategory, inputSales, inputPurchasePrice]}/>
-                    </>
-                )
-            case reportsNames[3]:
-                return (
-                    <>
-                    <FormContainer>
-                        <Input inputValue={inputCostDate} action={changeCostDate} placeholder={"Введите CostDate"}/>
-                        <Input inputValue={inputCostSum} action={changeCostSum} placeholder={"Введите CostSum"}/>
-                        <Input inputValue={inputExpenseItem} action={changeExpenseItem} placeholder={"Введите ExpenseItem"}/>
+                        <InpDate label="Введите дату" inputValue={inputCostDate} action={changeCostDate}/>
+                        <InpNumber label={"Введите сумму расхода"} inputValue={inputCostSum} action={changeCostSum}/>
+                        <InpSelect label={"Статья расходов"} itemsArr={expenses} inputValue={inputExpenseItem} action={changeExpenseItem}/>
                         <FormButton 
                             backgroundcolor={
                                 (!inputCostDate || !inputCostSum || !inputExpenseItem) ? "rgb(229, 229, 229)" : "rgb(40, 168, 40)"
@@ -157,6 +174,23 @@ const DataForm = (props) => {
                     </FormContainer>
                     <ValidationContainer inputValues={[inputCostDate, inputCostSum, inputExpenseItem]}/>
                     </>
+                )
+            case reportsNames[2]:
+                return (
+                    <>
+                    <h1>Загрузить все данные разом</h1>  
+                    <br/>
+                    <br/>
+                    <FormButton 
+                        backgroundcolor={
+                            (false) ? "rgb(229, 229, 229)" : "rgb(40, 168, 40)"
+                        }
+                        onClick={testSaveData}
+                    >Записать данные</FormButton>
+                    <br/>
+                    <br/>
+                    <h2>Пока тестово</h2> 
+                    </>                   
                 )
             default:
                 return <FormContainer>Не удалось создать набор инпутов.</FormContainer>

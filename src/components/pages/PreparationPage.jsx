@@ -1,23 +1,24 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import { changeReportType } from "../../redux-state/reducers/report-type";
 import { clearInputs } from "../../redux-state/reducers/form-imput";
 import { resetData } from "../../redux-state/reducers/data";
 import { useSelector, useDispatch } from "react-redux";
+import ChoosingCompany from "../views/local/CompanyContainer";
 import DataForm from "../views/local/DataForm";
 import reports from "../../services/reports";
-import css from "../../styles/views/global/main.css";
+import cssMain from "../../styles/views/global/main.css";
+import cssPrepor from "../../styles/views/local/preparation.css";
+import cssBtns from "../../styles/comps/buttons.css";
 
 
-const { MainContainer, ArticleContainer, AsideContainer} = css;
 
-const reportBtnCSS = {
-    display: "block",
-    padding: "1em 1.2em",
-    borderRadius: "0.5em",
-    backgroundColor: 'greenyellow',
-    cursor: 'pointer'
-}
+const { MainContainer, ArticleContainer, AsideContainer} = cssMain;
+const { ReportInfoContainer } = cssPrepor;
+const { AsideButton } = cssBtns;
+
+const reportsNames = Object.keys(reports);
+
 
 const PreparationPage  = (props) => {
       
@@ -28,44 +29,59 @@ const PreparationPage  = (props) => {
     const dispatch = useDispatch();
     const reportType = useSelector(state => state.reportTypeSlice.reportType);
 
-    const reportsNames = Object.keys(reports);
-
-
     const selectReport = (reportname) => {
         navigate(`/preparation/${reportname}`);
         dispatch(changeReportType(reportname));
-        //actionData([]);
         dispatch(resetData());
         dispatch(clearInputs());
-
     }
 
-    // useEffect(() => { console.log(actionData([])) }, [reportType]);
     
     return (
         <React.Fragment>
             <MainContainer>
                 <AsideContainer>
+                    
                     {reportType === 'choiceReport'
-                    ? reportsNames.map((name, index) => {
-                        return (
-                            <button key={index} style={reportBtnCSS} onClick={selectReport.bind(this, name)}>
-                                { reports[reportsNames[index]].name }
-                            </button>
-                        )
-                      })
-                    : <div>
-                        <div>Выбранный отчёт</div>
-                        <button style={reportBtnCSS} onClick={selectReport.bind(this, 'choiceReport')}>Выбрать другой отчёт</button>
-                      </div>
+                    ? (<>
+                        <h3>Выбор отчёта</h3>
+                        {reportsNames.map((name, index) => {
+                            return (
+                                <AsideButton key={index} onClick={selectReport.bind(this, name)}>
+                                    { reports[reportsNames[index]].name }
+                                </AsideButton>
+                            )
+                        })}
+                      </>)
+                    : <>
+                        <h4>Выбранный отчёт:</h4>
+                        <ReportInfoContainer>
+                            <h3>{reports[reportType].name}</h3>
+                            <p>Состав отчёта:</p>
+                            <ul>
+                                {Object.values(reports[reportType].reportsNames).map((reportName, index) =>{
+                                    return (
+                                        <li key={index}>{ reportName }</li>
+                                    )
+                                })}
+                            </ul>
+                        </ReportInfoContainer>
+                        <AsideButton onClick={selectReport.bind(this, 'choiceReport')}>Выбрать другой отчёт</AsideButton>
+                      </>
                     }                                      
                 </AsideContainer>
                 <ArticleContainer>
-                    {reportType === 'choiceReport'
-                    ? <span>Выбор отчёта</span>
-                    :<DataForm actionData={actionData} ></DataForm>
-                    }
                     
+                    {reportType === 'choiceReport'
+                    ? (<>
+                        <h1>Выбор компании</h1>
+                        <ChoosingCompany />
+                      </>)
+                    : (<>
+                        <h1>Ввод данных</h1>
+                        <DataForm actionData={actionData} />
+                      </>)
+                    }                    
                 </ArticleContainer>
             </MainContainer>
         </React.Fragment>
