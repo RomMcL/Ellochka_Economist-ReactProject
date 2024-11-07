@@ -1,4 +1,4 @@
-import React, { useState} from 'react';
+import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { changeIncomeData, changeExpenseData } from './redux-state/reducers/data';
@@ -28,7 +28,6 @@ function App() {
   /* const setExpenseData = (param) => dispatch(changeExpenseData(param)); */
   
 
-
   return (
     <React.Fragment>
       <Header/>
@@ -39,7 +38,7 @@ function App() {
         />
         <Route
           path={'/preparation/:reportName'}
-          element={<PreparationPage actionData={setData}/>}
+          element={<PreparationPage changeData={setData}/>}
         />
         <Route
           path={'/initialData'}

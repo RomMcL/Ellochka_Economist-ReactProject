@@ -3,7 +3,7 @@ import TextField from '@mui/material/TextField';
 
 const InpNumber = (props) => {
 
-    const { label, inputValue, action } = props;
+    const { label, inputValue, action, width } = props;
 
     const handleChange = (event) => {
         const newValue = event.target.value.replace(/\D/g, "");
@@ -14,10 +14,10 @@ const InpNumber = (props) => {
         <TextField
             label={label}
             id="outlined-end-adornment"
-            sx={{ m: 0, width: 420 }}
+            sx={{ m: 0, width: width }}
             slotProps={{
             input: {
-                endAdornment: <InputAdornment position="end">руб.</InputAdornment>,
+                endAdornment: <InputAdornment position="end">(руб.)</InputAdornment>,
             },
             }}
             value={inputValue}

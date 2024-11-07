@@ -14,9 +14,10 @@ export default function ToggleBtnData(props) {
       exclusive
       onChange={onChange}
       aria-label="Platform"
+      size="small"
     >
-      <ToggleButton value="incomeStatement">по доходам</ToggleButton>
-      <ToggleButton value="expenseReport">по расходам</ToggleButton>
+      <ToggleButton value="incomeStatement" disabled={typeData === "incomeStatement"}>по доходам</ToggleButton>
+      <ToggleButton value="expenseReport" disabled={typeData === "expenseReport"}>по расходам</ToggleButton>
     </ToggleButtonGroup>
   );
 }

@@ -22,7 +22,7 @@ const reportsNames = Object.keys(reports);
 
 const PreparationPage  = (props) => {
       
-    const { actionData } = props;
+    const { changeData } = props;
 
     const navigate = useNavigate();
 
@@ -79,7 +79,7 @@ const PreparationPage  = (props) => {
                       </>)
                     : (<>
                         <h1>Ввод данных</h1>
-                        <DataForm actionData={actionData} />
+                        <DataForm changeData={changeData} />
                       </>)
                     }                    
                 </ArticleContainer>

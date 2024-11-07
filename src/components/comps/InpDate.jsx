@@ -12,7 +12,7 @@ import 'dayjs/locale/ru';
 
 const InpDate = (props) => {
 
-    const { label, inputValue, action } = props;
+    const { label, inputValue, action, width } = props;
 
     const [cleared, setCleared] = useState(false);
 
@@ -44,9 +44,9 @@ const InpDate = (props) => {
 
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={'ru'}>
-            <DemoContainer components={['DatePicker']} sx={{position: 'relative'}}>
+            <DemoContainer components={['DatePicker']} sx={{position: 'relative', width: width, marginTop: '-8px'}}>
                 <DatePicker 
-                    sx={{ m: 0, width: 420 }}
+                    sx={{ m: 0, width: '100%'}}
                     slotProps={{
                         field: { clearable: true, onClear: () => setCleared(true) },
                     }}
@@ -59,7 +59,7 @@ const InpDate = (props) => {
                 />
                 {cleared && (
                     <Alert
-                    sx={{ position: 'absolute', top: 12, right: 50 }}
+                    sx={{ position: 'absolute', top: -12, right: 50 }}
                     severity="success"
                     >
                     Поле очищено!

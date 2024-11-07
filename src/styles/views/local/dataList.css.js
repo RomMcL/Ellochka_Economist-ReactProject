@@ -9,7 +9,6 @@ const css = {
         row-gap: 1em;   
         width: 100%;
         max-width: 1200px;
-        height: fit-content;
         margin: 0 auto;
         padding: 1em;
         border-radius: 0.5em;

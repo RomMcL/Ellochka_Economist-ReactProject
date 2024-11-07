@@ -15,6 +15,7 @@ export const dataSlice = createSlice({
         changeExpenseData: (state, action) => {
             state.expenseData.push(action.payload);
         },
+
         resetData: () => initialState
     }
 });

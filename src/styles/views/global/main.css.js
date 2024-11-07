@@ -31,7 +31,8 @@ const cssMain = {
         justify-content: flex-start;
         row-gap: 1em;
 
-        padding: 1em 1em 1em 2em; 
+        padding: 1em 1em 1em 2em;
+        text-align: center;
 
         background-color: aqua;
 

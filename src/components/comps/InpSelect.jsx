@@ -6,7 +6,7 @@ import Select from '@mui/material/Select';
 
 
 const InpSelect = (props) => {
-    const { label, itemsArr, inputValue, action } = props;
+    const { label, itemsArr, inputValue, action, width } = props;
 
     const [open, setOpen] = useState(false);
 
@@ -24,7 +24,7 @@ const InpSelect = (props) => {
     };
 
     return (                
-        <FormControl sx={{ m: 0, minWidth: 420 }}>
+        <FormControl sx={{ m: 0, width: width }}>
             <InputLabel id="demo-controlled-open-select-label">{label}</InputLabel>
             <Select
             labelId="demo-controlled-open-select-label"

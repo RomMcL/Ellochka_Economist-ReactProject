@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import TextField from '@mui/material/TextField';
 import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
@@ -18,9 +18,7 @@ const filter = createFilterOptions();
 
 const InpSelectSearch = (props) => {
 
-  const { label, itemsArr, inputValue, action } = props;
-
-  const [value, setValue] = useState(null);
+  const { label, itemsArr, inputValue, action, width } = props;
 
   const [open, toggleOpen] = useState(false);
 
@@ -42,8 +40,6 @@ const InpSelectSearch = (props) => {
     action(`${dialogValue.name}, ${dialogValue.form}`);
     handleClose();
   };
-
-  /* useEffect(() => {console.log(inputValue)},[inputValue]) */
 
   return (
     <React.Fragment>
@@ -104,7 +100,7 @@ const InpSelectSearch = (props) => {
             </li>
           );
         }}
-        sx={{ width: 420 }}
+        sx={{ width: width }}
         freeSolo
         renderInput={(params) => <TextField {...params} label={label} />}
       />

@@ -12,10 +12,12 @@ const cssPrepor = {
         }
         ul {
             list-style-type: circle;
-            list-style-position: inside;
+            list-style-position: outside;
             line-height: 1.6;
             margin-top: -0.5em;
+            text-align: start;
         }
+        li {text-align: center}
     `,
     CompanyContainer: styled.section`
         display: flex;

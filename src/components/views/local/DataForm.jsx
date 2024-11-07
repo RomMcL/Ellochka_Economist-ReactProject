@@ -12,20 +12,22 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
+import AccountCall from "./AccountCall";
 import ValidationContainer from "./ValidationContainer";
 import company from "../../../services/company";
 import reports from "../../../services/reports";
-import css from "../../../styles/views/local/form.css";
+import accountCall from "../../../services/accountCall";
+import cssForm from "../../../styles/views/local/form.css";
 
 
-const { FormContainer, FormButton } = css;
+const { FormContainer, InputsContainer, AccountCallButton } = cssForm;
 
 const reportsNames = Object.keys(reports);
 
 
 const DataForm = (props) => {
 
-    const { actionData } = props;
+    const { changeData } = props;
 
     const dispatch = useDispatch();
     const selectedCompany = useSelector(state => state.companySlice.company);
@@ -41,7 +43,8 @@ const DataForm = (props) => {
     const inputCostDate = useSelector(state => state.formInputSlice.costDate);
     const inputCostSum = useSelector(state => state.formInputSlice.costSum);
     const inputExpenseItem = useSelector(state => state.formInputSlice.expenseItem);
-    
+
+    const inputYear = useSelector(state => state.accountCallSlice.year);
 
     const categories = company[selectedCompany].productCategories;
     const expenses = company[selectedCompany].expenses;
@@ -84,31 +87,75 @@ const DataForm = (props) => {
 
 
     const saveData = () => {
-        const dataIncome = [inputDate, inputCategory, inputSales, inputPointOfSale, inputTypeOfSale,
-                          inputClient, inputPurchasePrice];
-        const dataExpense = [inputCostDate, inputCostSum, inputExpenseItem];
-
-        actionData.incomeData(dataIncome);
-        actionData.expenseData(dataExpense);
-
-
+        switch (reportType) {
+            case reportsNames[0]:                
+                const dataIncome = [inputDate, inputCategory, inputSales, inputPointOfSale, 
+                      inputTypeOfSale, inputClient, inputPurchasePrice];
+                changeData.incomeData(dataIncome);
+                break;
+            case reportsNames[1]:                
+                const dataExpense = [inputCostDate, inputCostSum, inputExpenseItem];
+                changeData.expenseData(dataExpense);
+                break;
+            default:                
+                break;
+        } 
         // очистка полей после записи данных
-        dispatch(clearInputs());            
+        dispatch(clearInputs());           
     }
 
-    const testSaveData = () => {
-        const dataIncome = ["inputDate", "inputCategory", "inputSales", "inputPointOfSale", "inputTypeOfSale",
-                          "inputClient", "inputPurchasePrice"];
-        const dataExpense = ["inputCostDate", "inputCostSum", "inputExpenseItem"];
+    
 
-        actionData.incomeData(dataIncome);
-        actionData.expenseData(dataExpense);
-           
+    const callAccount = () => {
+
+        const dataIncome = accountCall(selectedCompany, reportType, inputYear).dataIncome;
+        const dataExpense = accountCall(selectedCompany, reportType, inputYear).dataExpense;
+
+        switch (reportType) {
+            case reportsNames[0]:
+                changeDate(dataIncome[0]);
+                changeCategory(dataIncome[1]);
+                changeSales(dataIncome[2]);
+                changePointOfSale(dataIncome[3]);
+                dispatch(changeInputTypeOfSale(dataIncome[4]));
+                dataIncome[4] === "розница"
+                ? changeClient('Физ.лицо')
+                : changeClient(dataIncome[5]);
+                changePurchasePrice(dataIncome[6]);
+                break;
+            case reportsNames[1]:                
+                changeCostDate(dataExpense[0]);
+                changeCostSum(dataExpense[1]);
+                changeExpenseItem(dataExpense[2]);
+                break;
+            default:     
+                changeData.incomeData(dataIncome);
+                changeData.expenseData(dataExpense);
+                break;
+        }           
     }
 
+    const [isActiveBtn, setIsActiveBtn] = useState(false);
+    
+    useEffect(() => {
+        switch (reportType) {
+            case reportsNames[0]:
+                if(inputDate && inputCategory && inputSales && inputPointOfSale
+                    && inputPurchasePrice && inputTypeOfSale && inputClient
+                ) setIsActiveBtn(true)
+                else setIsActiveBtn(false)
+                break;
+            case reportsNames[1]:
+                if(inputCostDate && inputCostSum && inputExpenseItem) setIsActiveBtn(true)
+                else setIsActiveBtn(false)
+                break;
+            default:
+                break;
+        }
+    }, [reportType, inputDate, inputCategory, inputSales, inputPurchasePrice, inputPointOfSale, inputTypeOfSale, inputClient, inputCostDate, inputCostSum, inputExpenseItem])
 
     const validation = () => {
-        if (true || (inputDate && inputSales && inputCategory) || (inputPurchasePrice && inputPointOfSale)) {
+        if (true) {
             console.log('validation OK');
 
             saveData();
@@ -122,38 +169,37 @@ const DataForm = (props) => {
                 return (
                     <>
                     <FormContainer>
-                        <InpDate label="Введите дату" inputValue={inputDate} action={changeDate}/>
-                        <InpSelect label={"Категория"} itemsArr={categories} inputValue={inputCategory} action={changeCategory}/>
-                        <InpNumber label={"Введите сумму продаж"} inputValue={inputSales} action={changeSales}/>
-                        <InpSelect label={"Укажите точку продажи"} itemsArr={points} inputValue={inputPointOfSale} action={changePointOfSale}/>
-                        <FormControl>
-                            <FormLabel id="demo-row-radio-buttons-group-label">Тип продажи</FormLabel>
-                            <RadioGroup
-                                row
-                                aria-labelledby="demo-row-radio-buttons-group-label"
-                                name="row-radio-buttons-group"
-                                value={inputTypeOfSale}
-                                onChange={changeTypeOfSale}
-                            >
-                                <FormControlLabel value="розница" control={<Radio />} label="Розничная" />
-                                <FormControlLabel value="опт" control={<Radio />} label="Оптовая" />
-                            </RadioGroup>
-                        </FormControl> 
-                        {inputTypeOfSale === "опт" &&
-                            <InpSelectSearch 
-                                label="Введите контрагента"
-                                itemsArr={clients}
-                                inputValue={inputClient}
-                                action={changeClient}
-                            />
-                        }
-                        <InpNumber label={"Введите цену закупки"} inputValue={inputPurchasePrice} action={changePurchasePrice}/>
-                        <FormButton 
-                            backgroundcolor={
-                                (!inputDate || !inputSales || !inputCategory || !inputPointOfSale || (inputTypeOfSale === "опт" && !inputClient)) ? "rgb(229, 229, 229)" : "rgb(40, 168, 40)"
+                        <InputsContainer>
+                            <InpDate label="Дата" inputValue={inputDate} action={changeDate} width={"40%"}/>
+                            <InpSelect label={"Категория"} itemsArr={categories} inputValue={inputCategory} action={changeCategory} width={"58%"}/>
+                            <InpNumber label={"Сумму продаж"} inputValue={inputSales} action={changeSales} width={"40%"}/>
+                            <InpSelect label={"Точку продажи"} itemsArr={points} inputValue={inputPointOfSale} action={changePointOfSale} width={"58%"}/>
+                            <FormControl sx={{width: "40%"}}>
+                                <FormLabel id="demo-row-radio-buttons-group-label">Тип продажи</FormLabel>
+                                <RadioGroup
+                                    row
+                                    aria-labelledby="demo-row-radio-buttons-group-label"
+                                    name="row-radio-buttons-group"
+                                    value={inputTypeOfSale}
+                                    onChange={changeTypeOfSale}
+                                >
+                                    <FormControlLabel value="розница" control={<Radio />} label="Розничная" />
+                                    <FormControlLabel value="опт" control={<Radio />} label="Оптовая" />
+                                </RadioGroup>
+                            </FormControl> 
+                            {inputTypeOfSale === "опт" &&
+                                <InpSelectSearch 
+                                    label="Контрагент"
+                                    itemsArr={clients}
+                                    inputValue={inputClient}
+                                    action={changeClient}
+                                    width={"58%"}
+                                />
                             }
-                            onClick={validation}
-                        >Записать данные</FormButton>
+                            <InpNumber label={"Цену закупки"} inputValue={inputPurchasePrice} action={changePurchasePrice} width={"100%"}/>
+                        </InputsContainer>
+                        <AccountCall actionSave={validation} activeBtn={isActiveBtn}
+                                     actionCall={callAccount}/>
                     </FormContainer>
                     <ValidationContainer inputValues={[inputDate, inputCategory, inputSales, inputPointOfSale, inputTypeOfSale, inputClient, inputPurchasePrice]}/>
                     </>
@@ -162,15 +208,13 @@ const DataForm = (props) => {
                 return (
                     <>
                     <FormContainer>
-                        <InpDate label="Введите дату" inputValue={inputCostDate} action={changeCostDate}/>
-                        <InpNumber label={"Введите сумму расхода"} inputValue={inputCostSum} action={changeCostSum}/>
-                        <InpSelect label={"Статья расходов"} itemsArr={expenses} inputValue={inputExpenseItem} action={changeExpenseItem}/>
-                        <FormButton 
-                            backgroundcolor={
-                                (!inputCostDate || !inputCostSum || !inputExpenseItem) ? "rgb(229, 229, 229)" : "rgb(40, 168, 40)"
-                            }
-                            onClick={validation}
-                        >Записать данные</FormButton>
+                        <InputsContainer>
+                            <InpDate label="Дата" inputValue={inputCostDate} action={changeCostDate} width={"100%"}/>
+                            <InpNumber label={"Сумма расходов"} inputValue={inputCostSum} action={changeCostSum} width={"100%"}/>
+                            <InpSelect label={"Статья расходов"} itemsArr={expenses} inputValue={inputExpenseItem} action={changeExpenseItem} width={"100%"}/>
+                        </InputsContainer>
+                        <AccountCall actionSave={validation} activeBtn={isActiveBtn} 
+                                     actionCall={callAccount}/>
                     </FormContainer>
                     <ValidationContainer inputValues={[inputCostDate, inputCostSum, inputExpenseItem]}/>
                     </>
@@ -181,12 +225,9 @@ const DataForm = (props) => {
                     <h1>Загрузить все данные разом</h1>  
                     <br/>
                     <br/>
-                    <FormButton 
-                        backgroundcolor={
-                            (false) ? "rgb(229, 229, 229)" : "rgb(40, 168, 40)"
-                        }
-                        onClick={testSaveData}
-                    >Записать данные</FormButton>
+                    <AccountCallButton 
+                        onClick={callAccount}
+                    >Звонок бухгалтеру</AccountCallButton>
                     <br/>
                     <br/>
                     <h2>Пока тестово</h2> 
@@ -197,10 +238,6 @@ const DataForm = (props) => {
         }
     }
  
-    
-
-   // useEffect(() => {console.log(reportInfo)}, [reportName])
-
     return (
         
         inputsSet()
