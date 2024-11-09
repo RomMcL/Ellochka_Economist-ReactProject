@@ -14,13 +14,14 @@ import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import AccountCall from "./AccountCall";
 import ValidationContainer from "./ValidationContainer";
+import VariantsDataCreate from "./VariantsDataCreate";
 import company from "../../../services/company";
 import reports from "../../../services/reports";
 import accountCall from "../../../services/accountCall";
 import cssForm from "../../../styles/views/local/form.css";
 
 
-const { FormContainer, InputsContainer, AccountCallButton } = cssForm;
+const { FormContainer, InputsContainer } = cssForm;
 
 const reportsNames = Object.keys(reports);
 
@@ -221,17 +222,7 @@ const DataForm = (props) => {
                 )
             case reportsNames[2]:
                 return (
-                    <>
-                    <h1>Загрузить все данные разом</h1>  
-                    <br/>
-                    <br/>
-                    <AccountCallButton 
-                        onClick={callAccount}
-                    >Звонок бухгалтеру</AccountCallButton>
-                    <br/>
-                    <br/>
-                    <h2>Пока тестово</h2> 
-                    </>                   
+                    <VariantsDataCreate singleCall={callAccount}/>                
                 )
             default:
                 return <FormContainer>Не удалось создать набор инпутов.</FormContainer>

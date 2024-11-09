@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { changeReportType } from "../../redux-state/reducers/report-type";
 import { clearInputs } from "../../redux-state/reducers/form-imput";
 import { resetData } from "../../redux-state/reducers/data";
+import { resetAccountCalls } from "../../redux-state/reducers/account-call";
 import { useSelector, useDispatch } from "react-redux";
 import ChoosingCompany from "../views/local/CompanyContainer";
 import DataForm from "../views/local/DataForm";
@@ -33,6 +34,9 @@ const PreparationPage  = (props) => {
         navigate(`/preparation/${reportname}`);
         dispatch(changeReportType(reportname));
         dispatch(resetData());
+        
+        reportType === 'generalReport' ? 
+        dispatch(resetAccountCalls())  :
         dispatch(clearInputs());
     }
 

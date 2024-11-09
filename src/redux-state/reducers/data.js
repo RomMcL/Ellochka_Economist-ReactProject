@@ -13,7 +13,11 @@ export const dataSlice = createSlice({
             state.incomeData.push(action.payload);
         },
         changeExpenseData: (state, action) => {
-            state.expenseData.push(action.payload);
+            let newExpense = action.payload;
+            let exists = state.expenseData.some(expense => (expense[0] === newExpense[0] && 
+                                                            expense[2] === newExpense[2]));
+            /* if (exists) console.log("совпадение даты и статьи расходов"); */
+            if (!exists) state.expenseData.push(newExpense);
         },
 
         resetData: () => initialState

@@ -12,9 +12,6 @@ const TableFilterElement = (props) => {
 
     const handleChange = (event) => {
         setFilter(event.target.value);
-        /* (() => {
-            console.log(event.target.value)
-        })(); */
         filtering(event);
     };
 

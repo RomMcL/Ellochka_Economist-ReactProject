@@ -46,19 +46,7 @@ const cssForm = {
             text-align: center;
         }
     `,
-    AccountCallButton: styled.span`
-        display: block;
-        padding: 1em;
-        border: 2px solid black;
-        border-radius: 0.5em;        
-        cursor: pointer;
-        background-color: green; 
-        max-width: 8em;
-        font-size: 1.4em;
-        white-space: normal;
-        word-wrap: break-word;
-        text-align: center; 
-    `,
+
 
 }
 

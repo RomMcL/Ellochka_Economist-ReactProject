@@ -1,44 +1,23 @@
 import React from "react";
-import { changeInputYear } from "../../../redux-state/reducers/account-call";
-import { useSelector, useDispatch } from "react-redux";
-import InputAdornment from '@mui/material/InputAdornment';
-import TextField from '@mui/material/TextField';
+import BtnCallAccount from "../../comps/BtnCallAccount";
+import InpYearChoose from "../../comps/InpYearChoose";
 import cssForm from "../../../styles/views/local/form.css";
 
 
-const { AccountingContainer, AccountCallButton, FormButton } = cssForm;
+const { AccountingContainer, FormButton } = cssForm;
 
 const AccountCall = (props) => {
 
     const { actionSave, activeBtn, actionCall } = props;
 
-    const inputYear = useSelector(state => state.accountCallSlice.year);
-    const dispatch = useDispatch();
-
-    const changeYear = (event) => {
-        const currentYear = new Date().getFullYear();
-        let newValue = event.target.value.replace(/\D/g, "");
-        if (newValue > currentYear) newValue = currentYear;
-        dispatch(changeInputYear(newValue));
-    }
-
     return (
         <React.Fragment>
             <AccountingContainer>
-                <AccountCallButton onClick={actionCall}>Звонок бухгалтеру</AccountCallButton>
+                <BtnCallAccount onClick={actionCall}>
+                    Звонок бухгалтеру
+                </BtnCallAccount>
                 <p>Звонок в бухгалтерию поможет заполнить форму за указанный год.</p>
-                <TextField
-                    label="Период"
-                    id="outlined-end-adornment"
-                    sx={{ m: 0, width: "6.0em" }}
-                    slotProps={{
-                    input: {
-                        endAdornment: <InputAdornment position="end">год</InputAdornment>,
-                    },
-                    }}
-                    value={inputYear}
-                    onChange={changeYear}
-                />
+                <InpYearChoose/>
                 <FormButton 
                     backgroundcolor={
                         activeBtn ? "rgb(40, 168, 40)" : "rgb(229, 229, 229)"

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback, useMemo  } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import ToggleBtnData from "../../comps/ToggleBtnData";
 import TableSortElement from "../../comps/TableSortElement";
@@ -108,9 +108,7 @@ const DataList = (props) => {
                     })
                 })
             )
-            /* console.log(filters.current) */ 
         }    
-
         return <TableFilterElement itemsArr={arr} filtering={filtering}/>
     }
 
