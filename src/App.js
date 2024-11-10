@@ -41,7 +41,7 @@ function App() {
           element={<PreparationPage changeData={setData}/>}
         />
         <Route
-          path={'/initialData'}
+          path={'/initialData/:paginationPage'}
           element={<InitialDataPage initialData={data}/>}
         />
         <Route

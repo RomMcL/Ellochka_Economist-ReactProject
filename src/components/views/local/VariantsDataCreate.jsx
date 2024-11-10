@@ -2,6 +2,7 @@ import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { changeVisibility, changeQuantityСalls, changeSlider, resetAccountCalls } from "../../../redux-state/reducers/account-call";
 import { resetData } from "../../../redux-state/reducers/data";
+import { resetPagination } from "../../../redux-state/reducers/pagination-datalist";
 import InpYearChoose from "../../comps/InpYearChoose";
 import BtnCallAccount from "../../comps/BtnCallAccount";
 import SliderMinMax from "../../comps/SliderMinMax";
@@ -50,6 +51,7 @@ const VariantsDataCreate = (props) => {
     const changeVariant = () => {
         dispatch(resetAccountCalls());
         dispatch(resetData());
+        dispatch(resetPagination());
     }
 
     return (
@@ -76,7 +78,7 @@ const VariantsDataCreate = (props) => {
                     { quantityСalls > 0 &&
                         <>
                             <h4>Сформировано:</h4>
-                            <p>Доходы - {incomeData.length} строк, Расходы - {expenseData.length} строк</p>
+                            <p>Таблица доходов - {incomeData.length} строк, Таблица расходов - {expenseData.length} строк</p>
                         </>
                     }
                     
@@ -93,7 +95,7 @@ const VariantsDataCreate = (props) => {
                     ? <h2>Укажите желаемый размер исходных данных и запросите их выгрузку</h2>
                     : <>
                         <h4>Сформировано:</h4>
-                        <p>Доходы - {incomeData.length} строк, Расходы - {expenseData.length} строк</p>
+                        <p>Таблица доходов - {incomeData.length} строк, Таблица расходов - {expenseData.length} строк</p>
                       </>
                     }
                     <SliderMinMax val={sliderVal} action={changeSliderVal} 

@@ -18,6 +18,12 @@ const Header = () => {
     const navigate = useNavigate();
 
     const reportType = useSelector(state => state.reportTypeSlice.reportType);
+    const incomeData = useSelector(state => state.dataSlice.incomeData);
+    const expenseData = useSelector(state => state.dataSlice.expenseData);
+    const currentPage = useSelector(state => state.paginationSlice.currentPage);
+    
+    const emptyPage = (!incomeData.length && !expenseData.length);    
+   
 
     return (
         <React.Fragment>
@@ -26,7 +32,7 @@ const Header = () => {
                 <HeaderElements.NavigationContainer>
                     <span onClick={() => navigate('/main')} style={navButtonCSS}>Главная</span>
                     <span onClick={() => navigate(`/preparation/${reportType}`)} style={navButtonCSS}>Подготовка</span>
-                    <span onClick={() => navigate('/initialData')} style={navButtonCSS}>Входные данные</span>
+                    <span onClick={() => navigate(`/initialData/page_${emptyPage ? 'emptyPage' : currentPage}`)} style={navButtonCSS}>Входные данные</span>
                     <span onClick={() => navigate('/result')} style={navButtonCSS}>Результаты</span>
                 </HeaderElements.NavigationContainer>
             </HeaderContainer>

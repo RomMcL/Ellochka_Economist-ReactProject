@@ -1,9 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { changeCurrentPage, changeNumberRows, resetPagination } from "../../../redux-state/reducers/pagination-datalist";
 import ToggleBtnData from "../../comps/ToggleBtnData";
 import TableSortElement from "../../comps/TableSortElement";
 import TableFilterElement from "../../comps/TableFilterElement";
 import TableSumElement from "../../comps/TableSumElement";
+import Pagination from "../../comps/Pagination";
 import company from "../../../services/company";
 import reports from "../../../services/reports";
 import css from "../../../styles/views/local/dataList.css";
@@ -19,11 +22,13 @@ const DataList = (props) => {
         expenseReport: [],
     } } = props;
 
-    
+    const navigate = useNavigate(); 
 
+    const dispatch = useDispatch();
     const selectedCompany = useSelector(state => state.companySlice.company);
 
     const reportType = useSelector(state => state.reportTypeSlice.reportType);
+
 
     let defaultTypeData = "incomeStatement";
     reportType !== "generalReport" && (defaultTypeData = reportType);
@@ -34,10 +39,11 @@ const DataList = (props) => {
         setTypeData(newTypeData); 
         setShowData([...data[newTypeData]].sort((a, b) => a[0] > b[0] ? 1 : -1));
         setSort('increasing');
+        dispatch(resetPagination())
+        navigate(`/initialData/page_1`);
     };
 
-
-    
+       
     let isEmptyData = false;
     let startSortData = [];
 
@@ -59,6 +65,21 @@ const DataList = (props) => {
     };
 
 
+    const currentPage = useSelector(state => state.paginationSlice.currentPage);
+    const numberRows = useSelector(state => state.paginationSlice.numberRows);
+    const lastDataIndex = currentPage * numberRows;
+    const firstDataIndex = lastDataIndex - numberRows;
+    const paginationData = showData.slice(firstDataIndex, lastDataIndex);
+
+    const changePaginate = (pageNumber) => {
+        dispatch(changeCurrentPage(pageNumber));
+        navigate(`/initialData/page_${pageNumber}`);
+    }
+
+    const changeNumRows = (numberRows) => {
+        dispatch(changeNumberRows(numberRows));
+        navigate(`/initialData/page_1`);
+    }
 
 
     const titleList = reports[typeData]?.requiredData;
@@ -161,9 +182,6 @@ const DataList = (props) => {
     }
 
     
-
-
-
     
 
     return (
@@ -171,7 +189,8 @@ const DataList = (props) => {
 
             { isEmptyData
             ? <span>Данных ещё нет</span>
-            :   <DataListContainer>
+            : <>  
+                <DataListContainer>
                     <h3>{ reports[reportType].name } (исходные данные)</h3>
                     {reportType === "generalReport"
                     && <ToggleBtnData typeData={typeData} onChange={changeTypeData}></ToggleBtnData>
@@ -192,10 +211,10 @@ const DataList = (props) => {
                         })}
                     </DataListLine>
 
-                    { showData.map((item, index) => {
+                    { paginationData.map((item, index) => {
                         return (
                             <DataListLine key={index}>
-                                { showData[index].map((cell, idx) => {
+                                { paginationData[index].map((cell, idx) => {
                                     return (
                                         <DataListCell key={idx} width={reports[typeData].width[idx]}>{cell}</DataListCell>
                                     )
@@ -203,8 +222,13 @@ const DataList = (props) => {
                             </DataListLine>
                         )
                     })}
-
-                </DataListContainer> 
+                    
+                </DataListContainer>
+                <Pagination 
+                    currentPage={currentPage} totalPage={showData.length} 
+                    changePaginate={changePaginate} numberRows={numberRows} changeNumRows={changeNumRows} 
+                />
+              </>     
             }
            
         </React.Fragment>
