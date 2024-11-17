@@ -1,9 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
+import content from "../../services/contentSettings";
 
 const initialState = {
     visibility: [true, true, true, true],
     year: new Date().getFullYear(),
     quantityСalls: 0,
+    relationLuba: content.relationship[0],
     sliderVal: 0,
 
 }
@@ -21,6 +23,9 @@ export const accountCallSlice = createSlice({
         changeQuantityСalls: (state, action) => {
             state.quantityСalls = action.payload;
         },
+        changeRelationLuba: (state, action) => {
+            state.relationLuba = action.payload;
+        },
         changeSlider: (state, action) => {
             state.sliderVal = action.payload;
         },
@@ -30,5 +35,5 @@ export const accountCallSlice = createSlice({
     }
 });
 
-export const { changeVisibility, changeInputYear, changeQuantityСalls, changeSlider, resetAccountCalls } = accountCallSlice.actions;
+export const { changeVisibility, changeInputYear, changeQuantityСalls, changeRelationLuba, changeSlider, resetAccountCalls } = accountCallSlice.actions;
 export default accountCallSlice.reducer;

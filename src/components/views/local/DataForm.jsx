@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { changeInputDate, changeInputSales, changeInputCategory, changeInputPurchasePrice, 
          changeInputPointOfSale, changeInputTypeOfSale, changeInputClient, changeInputCostDate,
          changeInputCostSum, changeInputExpenseItem, clearInputs } from "../../../redux-state/reducers/form-imput";
@@ -129,12 +129,11 @@ const DataForm = (props) => {
                 changeCostSum(dataExpense[1]);
                 changeExpenseItem(dataExpense[2]);
                 break;
-            default:     
-                changeData.incomeData(dataIncome);
-                changeData.expenseData(dataExpense);
-                break;
+            default:
+                return {dataIncome: dataIncome, dataExpense: dataExpense};
         }           
     }
+
 
     const [isActiveBtn, setIsActiveBtn] = useState(false);
     
@@ -154,6 +153,16 @@ const DataForm = (props) => {
                 break;
         }
     }, [reportType, inputDate, inputCategory, inputSales, inputPurchasePrice, inputPointOfSale, inputTypeOfSale, inputClient, inputCostDate, inputCostSum, inputExpenseItem])
+
+
+   /*  const maxSizeExpenseData = useRef(0);
+
+    useEffect(() => {        
+        let maxMonth = 12;
+        inputYear === new Date().getFullYear() && (maxMonth = new Date().getMonth() + 1);
+        maxSizeExpenseData.current = maxMonth * company[selectedCompany].expenses.length;
+    }, [inputYear]) */
+
 
     const validation = () => {
         if (true) {
@@ -222,7 +231,10 @@ const DataForm = (props) => {
                 )
             case reportsNames[2]:
                 return (
-                    <VariantsDataCreate singleCall={callAccount}/>                
+                    <VariantsDataCreate 
+                        singleCall={callAccount}
+                        /* maxSizeExpenseData={maxSizeExpenseData.current} */
+                    />                
                 )
             default:
                 return <FormContainer>Не удалось создать набор инпутов.</FormContainer>

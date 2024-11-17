@@ -85,7 +85,7 @@ const PreparationPage  = (props) => {
                       </>)
                     : (<>
                         <h1>Ввод данных</h1>
-                        <DataForm changeData={changeData} />
+                        <DataForm changeData={changeData}/>
                       </>)
                     }                    
                 </ArticleContainer>

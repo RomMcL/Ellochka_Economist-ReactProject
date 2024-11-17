@@ -16,6 +16,7 @@ const TableSortElement = (props) => {
                 onChange={action}
                 displayEmpty
                 inputProps={{ 'aria-label': 'Without label' }}
+                MenuProps={{ disableScrollLock: true }} 
                 >
                 <MenuItem value={"decreasing"}>по убыванию</MenuItem>
                 <MenuItem value={"increasing"}>по возрастанию</MenuItem>

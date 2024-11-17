@@ -33,35 +33,27 @@ const DataList = (props) => {
     let defaultTypeData = "incomeStatement";
     reportType !== "generalReport" && (defaultTypeData = reportType);
 
+    let isEmptyData = false;
+    if (!data.incomeStatement.length && !data.expenseReport.length) isEmptyData=true;
+    
+
     const [typeData, setTypeData] = useState(defaultTypeData);
 
     const changeTypeData = (event, newTypeData) => {
         setTypeData(newTypeData); 
-        setShowData([...data[newTypeData]].sort((a, b) => a[0] > b[0] ? 1 : -1));
+        setShowData([...data[newTypeData]]);
         setSort('increasing');
         dispatch(resetPagination())
         navigate(`/initialData/page_1`);
     };
 
-       
-    let isEmptyData = false;
-    let startSortData = [];
-
-    if (!data.incomeStatement.length && !data.expenseReport.length) isEmptyData=true;
-    else startSortData = [...data[typeData]].sort((a, b) => a[0] > b[0] ? 1 : -1);
-
-    
-
-    const [showData, setShowData] = useState(() => {
-        return !isEmptyData ? startSortData : [];
-    } );
-
-    
+    const [showData, setShowData] = useState(data[typeData]);
+   
     const [sort, setSort] = useState('increasing');
 
     const changeSort = (event) => {
         setSort(event.target.value);
-        setShowData(showData.reverse());
+        setShowData([...showData].reverse());
     };
 
 
@@ -69,7 +61,7 @@ const DataList = (props) => {
     const numberRows = useSelector(state => state.paginationSlice.numberRows);
     const lastDataIndex = currentPage * numberRows;
     const firstDataIndex = lastDataIndex - numberRows;
-    const paginationData = showData.slice(firstDataIndex, lastDataIndex);
+    const paginationData = !isEmptyData && showData.slice(firstDataIndex, lastDataIndex);
 
     const changePaginate = (pageNumber) => {
         dispatch(changeCurrentPage(pageNumber));
@@ -122,7 +114,7 @@ const DataList = (props) => {
                       
             event.target.value ? filters.current[title] = event.target.value : delete filters.current[title];
             
-            setShowData((sort === "increasing" ? startSortData : startSortData.reverse())
+            setShowData((sort === "increasing" ? data[typeData] : [...data[typeData]].reverse())
                 .filter(dataLine => {
                     return Object.keys(filters.current).every(filter => {
                         return dataLine.includes(filters.current[filter])

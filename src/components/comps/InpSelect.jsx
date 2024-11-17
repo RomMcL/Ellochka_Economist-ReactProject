@@ -29,6 +29,7 @@ const InpSelect = (props) => {
             <Select
             labelId="demo-controlled-open-select-label"
             id="demo-controlled-open-select"
+            MenuProps={{ disableScrollLock: true }}
             open={open}
             onClose={handleClose}
             onOpen={handleOpen}

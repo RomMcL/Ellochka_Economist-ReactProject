@@ -23,6 +23,7 @@ const TableFilterElement = (props) => {
                 onChange={handleChange}
                 displayEmpty
                 inputProps={{ 'aria-label': 'Without label' }}
+                MenuProps={{ disableScrollLock: true }} 
                 >
                 <MenuItem value="">
                     <em>все</em>

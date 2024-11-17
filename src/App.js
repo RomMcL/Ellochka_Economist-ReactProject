@@ -16,17 +16,14 @@ function App() {
     incomeStatement: useSelector(state => state.dataSlice.incomeData),
     expenseReport: useSelector(state => state.dataSlice.expenseData),
   }
-  /* const incomeData = useSelector(state => state.dataSlice.incomeData); */
-  /* const expenseData = useSelector(state => state.dataSlice.expenseData); */
+  
   const dispatch = useDispatch();
 
   const setData = {
     incomeData: (param) => dispatch(changeIncomeData(param)),
     expenseData: (param) => dispatch(changeExpenseData(param)),
   }
-  /* const setIncomeData = (param) => dispatch(changeIncomeData(param)); */
-  /* const setExpenseData = (param) => dispatch(changeExpenseData(param)); */
-  
+
 
   return (
     <React.Fragment>

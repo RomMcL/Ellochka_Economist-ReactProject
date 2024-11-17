@@ -12,7 +12,7 @@ const generateRandomDate = (year) => {
     const from = new Date(year, 0, 1);
     let to = new Date();
     year !== new Date().getFullYear() && (to = new Date(year, 11, 31));
-    return new Date(from.getTime() + Math.random() * (to.getTime() - from.getTime()))
+    return new Date(from.getTime() + Math.random() * (to.getTime() - from.getTime()) + 43200000)
                     .toISOString().split('T')[0];
 }
 
