@@ -155,15 +155,6 @@ const DataForm = (props) => {
     }, [reportType, inputDate, inputCategory, inputSales, inputPurchasePrice, inputPointOfSale, inputTypeOfSale, inputClient, inputCostDate, inputCostSum, inputExpenseItem])
 
 
-   /*  const maxSizeExpenseData = useRef(0);
-
-    useEffect(() => {        
-        let maxMonth = 12;
-        inputYear === new Date().getFullYear() && (maxMonth = new Date().getMonth() + 1);
-        maxSizeExpenseData.current = maxMonth * company[selectedCompany].expenses.length;
-    }, [inputYear]) */
-
-
     const validation = () => {
         if (true) {
             console.log('validation OK');
