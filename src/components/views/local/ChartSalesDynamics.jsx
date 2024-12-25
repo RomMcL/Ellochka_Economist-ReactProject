@@ -128,9 +128,7 @@ const ChartSalesDynamics = () => {
                 <ToggleButton value="byCategory" disabled={typeChart === "byCategory"}>по категориям</ToggleButton>
             </ToggleButtonGroup>
 
-            <LineChart 
-                data={data}
-            />
+            <LineChart data={data} />
 
             {typeChart === "byCategory" && (
                 <Stack direction="column" spacing={1} sx={{textAlign: "center"}}>

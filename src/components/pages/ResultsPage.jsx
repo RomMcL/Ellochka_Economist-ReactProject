@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import ChartSalesDynamics from "../views/local/ChartSalesDynamics";
+import ChartSalesStructure from "../views/local/ChartSalesStructure";
 import reports from "../../services/reports";
 import cssMain from "../../styles/views/global/main.css";
 import cssBtns from "../../styles/comps/buttons.css";
@@ -55,7 +56,7 @@ const ResultsPage  = () => {
             case "salesDynamics":
                 return (<ChartSalesDynamics />);
             case "salesStructure":
-                return (<div>{resultReport}</div>);
+                return (<ChartSalesStructure />);
             case "grossProfit":
                 return (<div>{resultReport}</div>);
             case "costStructure":
