@@ -9,8 +9,9 @@ import Stack from '@mui/material/Stack';
 import LineChart from "../../charts/LineChart";
 
 import company from "../../../services/company";
+import content from "../../../services/contentSettings";
 
-const months = ["январь", "февраль", "март", "апрель", "май", "июнь", "июль", "август", "сентябрь", "октябрь", "ноябрь", "декабрь"];
+const months = content.months;
 
 const ChartSalesDynamics = () => {
 
@@ -92,7 +93,7 @@ const ChartSalesDynamics = () => {
     }
  
 
-    const [data, setData] = useState([createAllSalesData()]);
+    
 
     const [typeChart, setTypeChart] = useState("all");
 
@@ -108,10 +109,14 @@ const ChartSalesDynamics = () => {
         }
       };
 
-    useEffect(() => {
+
+    const [data, setData] = useState(); 
+
+    useEffect(() => {        
         typeChart === "all" ? setData([createAllSalesData()]) : setData(createCategorySalesData());
     }, [typeChart, categories]);
 
+    
 
     return (
         <>  

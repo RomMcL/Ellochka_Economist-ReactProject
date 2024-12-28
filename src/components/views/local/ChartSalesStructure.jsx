@@ -17,12 +17,9 @@ const ChartSalesStructure = () => {
 
     const incomeData = useSelector(state => state.dataSlice.incomeData);
 
-    /* const dataRetail = incomeData.filter(dataLine => dataLine[4] === "розница"); */
-    /* const dataWholesale = incomeData.filter(dataLine => dataLine[4] === "опт"); */
-
     const dataRetail = useMemo(() => incomeData.filter(dataLine => dataLine[4] === "розница"), [incomeData]);
     const dataWholesale = useMemo(() => incomeData.filter(dataLine => dataLine[4] === "опт"), [incomeData]);
-    /* const dataByMonth = useMemo(() => filteringData(), []); */
+    
 
     const createDataChart = (typeChartData) => {
         const data = [];

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { changeInputDate, changeInputSales, changeInputCategory, changeInputPurchasePrice, 
          changeInputPointOfSale, changeInputTypeOfSale, changeInputClient, changeInputCostDate,
          changeInputCostSum, changeInputExpenseItem, clearInputs } from "../../../redux-state/reducers/form-imput";
