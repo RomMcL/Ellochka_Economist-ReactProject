@@ -1,13 +1,17 @@
 import { ResponsiveBar } from '@nivo/bar'
 
-const BarChart = ({ data, keys, indexBy }) => (
+const BarChart = ({ data, keys, parameters }) => (
     <ResponsiveBar
         data={data}
         keys={keys}
-        indexBy={indexBy}
-        margin={{ top: 50, right: 280, bottom: 50, left: 60 }}
+        indexBy="criteria"
+        margin={{ top: parameters.marginTop, right: 280, bottom: 50, left: parameters.marginLeft }}
         height={500}
         padding={0.3}
+        layout={parameters.layout}
+        label={parameters.label}
+        labelPosition={parameters.labelPosition}
+        labelOffset={parameters.labelOffset}
         valueScale={{ type: 'linear' }}
         indexScale={{ type: 'band', round: true }}
         colors={{ scheme: 'nivo' }}
@@ -18,18 +22,13 @@ const BarChart = ({ data, keys, indexBy }) => (
             tickSize: 5,
             tickPadding: 5,
             tickRotation: 0,
-
             legendOffset: 32,
             truncateTickAt: 0
         }}
-        axisLeft={{
-            tickSize: 5,
-            tickPadding: 5,
-            tickRotation: 0,
+        axisLeft={parameters.axisLeft}
+        enableGridX={parameters.enableGridX}
+        enableGridY={parameters.enableGridY}
 
-            legendOffset: -40,
-            truncateTickAt: 0
-        }}
         enableTotals={true}
         labelSkipWidth={12}
         labelSkipHeight={12}

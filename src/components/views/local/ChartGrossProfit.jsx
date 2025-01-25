@@ -15,7 +15,26 @@ import content from "../../../services/contentSettings";
 
 const months = content.months;
 
-const keys=['Валовая прибыль', 'Цена закупки'];   
+const keys=['Валовая прибыль', 'Цена закупки'];
+
+const parameters = {
+  layout: "vertical",
+  marginLeft: 60,
+  marginTop: 50,
+  enableGridX: false,
+  enableGridY: true,
+  label: "formattedValue",
+  labelPosition: "middle",
+  labelOffset: 0,
+  axisLeft: {
+    tickSize: 5,
+    tickPadding: 5,
+    tickRotation: 0,
+    legendOffset: -40,
+    truncateTickAt: 0
+  },
+}
+
 
 
 const ChartGrossProfit = () => {
@@ -72,7 +91,7 @@ const ChartGrossProfit = () => {
         })
       }
       return dataByMonth;
-  }
+    }
 
     
     const createGrossProfitData = (usedData) => {
@@ -162,7 +181,7 @@ const ChartGrossProfit = () => {
             />
           </Stack>
             
-          <BarChart data={data} keys={keys} indexBy={"criteria"} />
+          <BarChart data={data} keys={keys} parameters={parameters}/>
 
         </>
     )

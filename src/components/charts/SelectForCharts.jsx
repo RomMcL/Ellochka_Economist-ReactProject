@@ -14,7 +14,7 @@ const SelectForCharts = (props) => {
     };
 
     return (
-        <div>
+        
         <FormControl sx={{ m: 1, minWidth: 200 }} size="small">
             <InputLabel id="select-for-charts-label">{label}</InputLabel>
             <Select
@@ -32,7 +32,7 @@ const SelectForCharts = (props) => {
             })}
             </Select>
         </FormControl>
-        </div>
+        
     );
 }
 

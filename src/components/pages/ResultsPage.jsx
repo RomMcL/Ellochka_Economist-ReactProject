@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import ChartSalesDynamics from "../views/local/ChartSalesDynamics";
 import ChartSalesStructure from "../views/local/ChartSalesStructure";
 import ChartGrossProfit from "../views/local/ChartGrossProfit";
+import ChartCostStructure from "../views/local/ChartCostStructure";
 import reports from "../../services/reports";
 import cssMain from "../../styles/views/global/main.css";
 import cssBtns from "../../styles/comps/buttons.css";
@@ -61,7 +62,7 @@ const ResultsPage  = () => {
             case "grossProfit":
                 return (<ChartGrossProfit />);
             case "costStructure":
-                return (<div>{resultReport}</div>);
+                return (<ChartCostStructure />);
             default:
                 return (<div>ШИШ</div>);
         }            
